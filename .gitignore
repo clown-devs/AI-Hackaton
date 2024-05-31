@@ -1,4 +1,7 @@
 *.pyc
 *.pyo
-
+*.csv
+*.edf
 venv
+.venv
+.idea
