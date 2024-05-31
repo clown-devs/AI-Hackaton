@@ -1,0 +1,16 @@
+//input -> файл в формате .REC 
+
+
+
+//output -> отрисовать этот json
+{
+    [
+        {
+            "episode": int,
+            "start" : int(seconds),
+            "end": int(seconds),
+            "duration": int(seconds),
+            "type": string
+        }
+    ]
+}
