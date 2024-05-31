@@ -514,7 +514,8 @@ def _read_header(fname, exclude, infer_types, include=None, exclude_after_unique
     """
     ext = os.path.splitext(fname)[1][1:].lower()
     logger.info("%s file detected" % ext.upper())
-    if ext in ("bdf", "edf"):
+    
+    if ext in ("bdf", "edf", "rec"):
         return _read_edf_header(
             fname, exclude, infer_types, include, exclude_after_unique
         )
@@ -1695,8 +1696,8 @@ def read_raw_edf(
     """
     input_fname = os.path.abspath(input_fname)
     ext = os.path.splitext(input_fname)[1][1:].lower()
-    if ext != "edf":
-        raise NotImplementedError(f"Only EDF files are supported, got {ext}.")
+    #if ext != "edf":
+    #    raise NotImplementedError(f"Only EDF files are supported, got {ext}.")
     return RawEDF(
         input_fname=input_fname,
         eog=eog,
