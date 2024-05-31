@@ -14,7 +14,3 @@ def parse_file(file_path: str) -> Tuple[np.ndarray, str]:
 
 def save_to_csv(data: np.ndarray, header: str, output_filename: str):
     np.savetxt(output_filename, data, delimiter=',', header=header)
-
-data, header = parse_file('N-1.edf')
-
-save_to_csv(data, header, 'N-1.csv')
