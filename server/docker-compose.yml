@@ -11,4 +11,4 @@ services:
     volumes:
       - ./:/AI-Hackaton
     ports:
-      - '8000:85'
+      - '85:85'
