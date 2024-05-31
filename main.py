@@ -9,7 +9,7 @@ if len(sys.argv) != 3:
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
-
+print(f"Converting {input_file} to {output_file}")
 
 data, header = parser.parse_file(input_file)
 parser.save_to_csv(data, header, output_file)
