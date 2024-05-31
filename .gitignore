@@ -2,6 +2,8 @@
 *.pyo
 *.csv
 *.edf
+*.REC
+
 venv
 .venv
 .idea
