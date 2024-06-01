@@ -4,13 +4,14 @@
     
 //output -> отрисовать этот json
 {
-    [
+    "word_url": string(url),
+    "items":[
         {
             "episode": int,
             "start" : int(seconds),
             "end": int(seconds),
             "duration": int(seconds),
-            "type": string
+            "type": string,
         }
     ]
 }

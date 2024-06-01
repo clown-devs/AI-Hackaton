@@ -3,6 +3,7 @@ import hashlib
 from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 origins = ["*"]
@@ -22,6 +23,12 @@ class Item(BaseModel):
     duration: int
     type: str
 
+class ItemList(BaseModel):
+    items: List[Item]
+    word_url: str = None
+
+app.mount("/static", StaticFiles(directory="./server/static"), name="static")
+
 # gets file in .edf format and returns list of episodes with their types
 @app.post("/")
 async def read_rec(file: UploadFile, n: int = 10):
@@ -34,9 +41,9 @@ async def read_rec(file: UploadFile, n: int = 10):
     return generate_random_array(n)
     
 
-def generate_random_array(n: int) -> List[Item]:
+def generate_random_array(n: int) :
     import random
-    arr = []
+    data = ItemList(items=[], word_url="static/example.docx")
     for i in range(n):
-        arr.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type="random"))
-    return arr
+        data.items.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type="type"))
+    return data

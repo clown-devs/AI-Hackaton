@@ -515,15 +515,11 @@ def _read_header(fname, exclude, infer_types, include=None, exclude_after_unique
     ext = os.path.splitext(fname)[1][1:].lower()
     logger.info("%s file detected" % ext.upper())
     
-    if ext in ("bdf", "edf", "rec"):
-        return _read_edf_header(
-            fname, exclude, infer_types, include, exclude_after_unique
-        )
-    elif ext == "gdf":
+    if ext == "gdf":
         return _read_gdf_header(fname, exclude, include), None
     else:
-        raise NotImplementedError(
-            f"Only GDF, EDF, and BDF files are supported, got {ext}."
+        return _read_edf_header(
+            fname, exclude, infer_types, include, exclude_after_unique
         )
 
 
@@ -864,7 +860,10 @@ def _read_edf_header(
             year = year + 2000 if year < 85 else year + 1900
 
         meas_time = fid.read(8).decode("latin-1")
-        hour, minute, sec = (int(x) for x in meas_time.split(":"))
+        if "." in meas_time:
+            hour, minute, sec = (int(x) for x in meas_time.split("."))
+        else:
+            hour, minute, sec = (int(x) for x in meas_time.split(":"))
         try:
             meas_date = datetime(
                 year, month, day, hour, minute, sec, tzinfo=timezone.utc
