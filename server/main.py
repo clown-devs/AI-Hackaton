@@ -22,8 +22,10 @@ class Item(BaseModel):
     end: int
     duration: int
     type: str
-    word_url: str = None
 
+class ItemList(BaseModel):
+    items: List[Item]
+    word_url: str = None
 
 app.mount("/static", StaticFiles(directory="./server/static"), name="static")
 
@@ -39,9 +41,9 @@ async def read_rec(file: UploadFile, n: int = 10):
     return generate_random_array(n)
     
 
-def generate_random_array(n: int) -> List[Item]:
+def generate_random_array(n: int) :
     import random
-    arr = []
+    data = ItemList(items=[], word_url="static/example.docx")
     for i in range(n):
-        arr.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type="random", word_url="static/example.docx"))
-    return arr
+        data.items.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type="type"))
+    return data
