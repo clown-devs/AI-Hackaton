@@ -1,87 +1,58 @@
-import io
 import os
 
-import aiohttp
 import requests
 from aiogram import types, Dispatcher
-from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import StatesGroup, State
-from aiogram.utils.exceptions import MessageCantBeDeleted
+
 
 from bot.create_bot import bot
 
 
-class FSMSetDoc(StatesGroup):
-    new_value = State()
+async def doc_set(message: types.Message, **kwargs):
+    if message.document.mime_type not in ['text/plain'] or message.document.file_name[-3:] != 'REC':
+        await bot.send_message(message.from_user.id, "Неверный формат файла ❌. Загрузите файл в формате .REC!")
+        await message.delete()
+        return
 
+    if message.document.file_size > 83886080:
+        await bot.send_message(message.from_user.id, "Превышен максимально допустимый объем файла ❌")
+        await message.delete()
+        return
 
-async def upload(message: types.Message, state: FSMContext):
-    try:
-        msg = await bot.send_message(message.from_user.id, "Отправьте файл")
-        async with state.proxy() as data:
-            data['msg'] = msg
-            await FSMSetDoc.new_value.set()
+    # Сохраняем файл
+    msg = await bot.send_message(message.from_user.id, "Пожалуйста дождитесь загрузки файла🕒")
+    file_info = await bot.get_file(message.document.file_id)
 
-        try:
-            await message.delete()
-        except MessageCantBeDeleted:
-            pass
-    except:
-        pass
+    BOT_TOKEN = os.getenv("TOKEN")
+    file_url = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file_info.file_path}'
 
+    # Получение файла
+    response = requests.get(file_url, stream=True)
+    print(response)
 
-async def doc_set(message: types.Message, state: FSMContext, **kwargs):
-    async with state.proxy() as data:
-        # Забираем необходимую информацию
-        msg: types.Message = data["msg"]
+    # Проверка успешности GET-запроса
+    if response.status_code == 200:
+        files = {'file': ('filename', response.raw)}
+        post_response = requests.post("http://v0d14ka.ddns.net:99/", files=files)
 
-        if message.document.mime_type in ['text/plain'] and message.document.file_name[-3:] == 'REC':
-            if message.document.file_size < 83886080:
-                # Сохраняем файл
-                await msg.edit_text("Пожалуйста подождите загрузки файла🕒")
-                await state.finish()
-
-                print(message.document.file_id)
-                file_info = await bot.get_file(message.document.file_id)
-
-                BOT_TOKEN = os.getenv("TOKEN")
-                file_url = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file_info.file_path}'
-
-                # Получение файла
-                response = requests.get(file_url, stream=True)
-                print(response)
-
-                # Проверка успешности GET-запроса
-                if response.status_code == 200:
-                    # Отправка файла на ваш сервер
-                    files = {'file': ('filename', response.raw)}
-                    post_response = requests.post("http://v0d14ka.ddns.net:99/", files=files)
-                    print(post_response.json())
-
-                    # Проверка успешности POST-запроса
-                    if post_response.status_code == 200:
-                        print('Файл успешно отправлен.')
-                    else:
-                        print(f'Ошибка при отправке файла: {post_response.status_code}')
-                        print(post_response.text)
-                else:
-                    print(f'Ошибка при получении файла: {response.status_code}')
-
-                if response != "error":
-                    await msg.edit_text("Файл успешно сохранен!✅")
-                else:
-                    await msg.edit_text("В данный момент прием работ не принимается")
+        # Проверка успешности POST-запроса
+        if post_response.status_code == 200:
+            word_url = post_response.json()['word_url']
+            get_word_response = requests.get(f"http://v0d14ka.ddns.net:99/{word_url}", stream=True)
+            await msg.delete()
+            await bot.send_document(message.from_user.id, get_word_response.content, caption='Отчет в формате WORD!')
 
         else:
-            await msg.edit_text("Неверный формат файла❌. Пожалуйста, отправьте файл в формате PDF.")
-            await message.delete()
+            print(f'Ошибка при отправке файла: {post_response.status_code}')
+            print(post_response.text)
+            await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
             return
+    else:
+        print(f'Ошибка при получении файла: {response.status_code}')
+        await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
+        return
 
-        await message.delete()
-        await state.finish()
+    await message.delete()
 
 
 def register_handlers_general(_dp: Dispatcher):
-    _dp.register_message_handler(upload, commands=['file'], state=None)
-    _dp.register_message_handler(doc_set, state=FSMSetDoc.new_value, content_types=['document'])
-    _dp.register_message_handler(doc_set, commands=['start', 'help'], state=None)
+    _dp.register_message_handler(doc_set, content_types=['document'], state=None)
