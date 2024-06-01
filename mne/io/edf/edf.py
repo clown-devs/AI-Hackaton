@@ -998,7 +998,13 @@ def _read_edf_header(
             tal_idx=tal_idx,
         )
 
-        fid.read(32 * nchan).decode()  # reserved
+        
+        subtype_concrete = os.path.splitext(fname)[1][1:]
+        if subtype_concrete == 'rec':
+            fid.read(32 * nchan)
+        else:
+            fid.read(32 * nchan).decode()  # reserved
+        
         assert fid.tell() == header_nbytes
 
         fid.seek(0, 2)
