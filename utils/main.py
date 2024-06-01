@@ -3,8 +3,8 @@ import shutil
 
 def copy_files(source_dir, target_dir):
     if not os.path.exists(target_dir):
-        os.makedirs(target_dir + "/rec")
-        os.makedirs(target_dir + "/not_rec")
+        os.makedirs(os.path.join(target_dir, "rec"))
+        os.makedirs(os.path.join(target_dir, "not_rec"))
 
     for root, dirs, files in os.walk(source_dir):
         for file in files:
@@ -17,10 +17,10 @@ def copy_files(source_dir, target_dir):
 
             if file.endswith('.REC'):
                 new_file_name = new_file_name.replace(' ', '') + '.REC'
-                new_file_path = os.path.join(target_dir + "/rec", new_file_name)
+                new_file_path = os.path.join(target_dir, "rec", new_file_name)
             else:
                 new_file_name = new_file_name.replace(' ', '') + os.path.splitext(file)[1]
-                new_file_path = os.path.join(target_dir + "/not_rec", new_file_name)
+                new_file_path = os.path.join(target_dir, "not_rec", new_file_name)
             shutil.copy2(old_file_path, new_file_path)
 
 
