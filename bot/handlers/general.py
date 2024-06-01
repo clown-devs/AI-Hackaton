@@ -38,8 +38,12 @@ async def doc_set(message: types.Message, **kwargs):
         if post_response.status_code == 200:
             word_url = post_response.json()['word_url']
             get_word_response = requests.get(f"http://v0d14ka.ddns.net:99/{word_url}", stream=True)
-            await msg.delete()
-            await bot.send_document(message.from_user.id, get_word_response.content, caption='Отчет в формате WORD!')
+
+            if get_word_response.content is not None:
+                await msg.delete()
+                await bot.send_document(message.from_user.id, get_word_response.content, caption='Отчет в формате WORD!')
+            else:
+                await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
 
         else:
             print(f'Ошибка при отправке файла: {post_response.status_code}')
