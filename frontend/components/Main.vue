@@ -1,6 +1,6 @@
 <template>
   <main class="main">
-    <div  class="container">
+    <div v-if="!upload" class="container">
       <div class="drag_n_drop">
         <div
           class="dropzone"
@@ -49,9 +49,9 @@
         <div v-else></div>
       </div>
     </div>
-    <!-- <div v-else class="container">
-      <FinishedComponent />
-    </div> -->
+    <div v-else class="container">
+      <FinishedComponent :valueWordUrl="word_url" />
+    </div>
   </main>
 </template>
 <script setup>
@@ -61,6 +61,7 @@ import Upload from 'assets/upload.svg';
 import FinishedComponent from './FinishedComponent.vue';
 
 let fileName = ref('Максимум 10мб');
+const word_url = ref(null);
 
 const response = ref(null);
 const upload = ref(false);
@@ -85,6 +86,8 @@ const uploadFiles = async (file) => {
   try {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data.items;
+    word_url.value = res.data.word_url;
+    console.log(res.data.word_url);
   } catch (error) {
     console.error('Ошибка при отправке файлов:', error);
   }
@@ -105,7 +108,7 @@ const uploadFile = async (event) => {
   try {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data.items;
-    console.log(res.data.items);
+    word_url.value = res.data.word_url;
   } catch (error) {
     console.error('Ошибка при отправке файла:', error);
   }
