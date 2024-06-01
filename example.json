@@ -5,9 +5,9 @@
 //output -> отрисовать этот json
 {
     "word_url": string(url),
+    "dead": bool,
     "items":[
         {
-            "dead": bool,
             "episode": int,
             "start" : int(seconds),
             "end": int(seconds),
