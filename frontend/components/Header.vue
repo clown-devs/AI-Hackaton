@@ -9,17 +9,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: aquamarine;
+  background-color: white;
   width: 100%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 }
 
 .container {
   width: 1440px;
-  height: 97px;
+  height: 186px;
   padding-inline: 88px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .header_title {

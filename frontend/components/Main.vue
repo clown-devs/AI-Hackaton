@@ -91,7 +91,7 @@ const uploadFile = async (event) => {
   formData.append('file', file);
 
   try {
-    const res = await axios.post('http://v0d14ka.ddns.net:99/?n=100', formData);
+    const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data;
   } catch (error) {
     console.error('Ошибка при отправке файла:', error);
@@ -104,6 +104,7 @@ const uploadFile = async (event) => {
   align-items: center;
   justify-content: center;
   width: 100%;
+  background-color: #f9f9f9;
 }
 
 .container {
