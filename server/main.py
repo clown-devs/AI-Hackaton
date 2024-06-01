@@ -25,7 +25,7 @@ class Item(BaseModel):
     word_url: str = None
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="./server/static"), name="static")
 
 # gets file in .edf format and returns list of episodes with their types
 @app.post("/")
