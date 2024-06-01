@@ -1006,7 +1006,7 @@ def _read_edf_header(
             try:
                 fid.read(32 * nchan).decode()  # reserved
             except UnicodeDecodeError:
-                fid.read(32 * nchan)
+                pass
         assert fid.tell() == header_nbytes
 
         fid.seek(0, 2)
