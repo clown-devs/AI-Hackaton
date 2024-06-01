@@ -15,8 +15,8 @@ def copy_files(source_dir, target_dir):
             new_file_name = ''.join(path_parts[1:]) + os.path.splitext(file)[0]
             # Удаляем пробелы из нового имени файла
 
-            if file.endswith('.REC'):
-                new_file_name = new_file_name.replace(' ', '') + '.REC'
+            if file.endswith('.REC') or file.endswith('.rec'):
+                new_file_name = new_file_name.replace(' ', '') + os.path.splitext(file)[1]
                 new_file_path = os.path.join(target_dir, "rec", new_file_name)
             else:
                 new_file_name = new_file_name.replace(' ', '') + os.path.splitext(file)[1]
