@@ -1003,8 +1003,10 @@ def _read_edf_header(
         if subtype_concrete == 'rec':
             fid.read(32 * nchan)
         else:
-            fid.read(32 * nchan).decode()  # reserved
-        
+            try:
+                fid.read(32 * nchan).decode()  # reserved
+            except UnicodeDecodeError:
+                fid.read(32 * nchan)
         assert fid.tell() == header_nbytes
 
         fid.seek(0, 2)
