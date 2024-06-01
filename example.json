@@ -10,7 +10,8 @@
             "start" : int(seconds),
             "end": int(seconds),
             "duration": int(seconds),
-            "type": string
+            "type": string,
+            "word": string(url)
         }
     ]
 }
