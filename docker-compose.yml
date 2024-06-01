@@ -7,21 +7,18 @@ services:
     container_name: api
     build:
       dockerfile: server/Dockerfile
-    command: sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 85"
+    command: sh -c "uvicorn server.main:app --reload --host 0.0.0.0 --port 85"
     volumes:
       - ./:/AI-Hackaton
     ports:
       - '85:85'
 
-  bot:
+  bot_ai:
     restart: "no"
     build:
       dockerfile: bot/Dockerfile
-    command: sh -c "python telegram_bot.py"
-    container_name: bot
-
-    env_file:
-      - ./.env
+    command: sh -c "python bot/telegram_bot.py"
+    container_name: bot_ai
     volumes:
       - ./:/TG_bot
     depends_on:
