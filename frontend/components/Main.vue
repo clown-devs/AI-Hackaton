@@ -1,21 +1,27 @@
 <template>
   <main class="main">
-    <div class="container">
+    <div  class="container">
       <div class="drag_n_drop">
-        <form method="post" enctype="multipart/form-data">
-          <label class="input-file">
-            <input type="file" name="file" @change="uploadFile" />
-            <span class="input-file-btn">Выберите файл</span>
-            <span class="input-file-text">{{ fileName }}</span>
-          </label>
-        </form>
         <div
           class="dropzone"
           @dragover.prevent="dragOverHandler"
           @drop.prevent="dropHandler"
         >
-          Перетащите файлы сюда
+          <Upload class="upload_logo" />
+          <h4>Перетащите сюда файлы для загрузки</h4>
+          <span class="or">или</span>
+          <div class="button_send">
+            <form method="post" enctype="multipart/form-data">
+              <label class="input-file">
+                <input type="file" name="file" @change="uploadFile" />
+                <span class="input-file-btn">Выберите файл</span>
+              </label>
+            </form>
+          </div>
         </div>
+      </div>
+      <div class="image_main">
+        <img src="../assets/image.png" alt="" />
       </div>
       <div class="table_data">
         <div v-if="response">
@@ -43,15 +49,21 @@
         <div v-else></div>
       </div>
     </div>
+    <!-- <div v-else class="container">
+      <FinishedComponent />
+    </div> -->
   </main>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import Upload from 'assets/upload.svg';
+import FinishedComponent from './FinishedComponent.vue';
 
 let fileName = ref('Максимум 10мб');
 
 const response = ref(null);
+const upload = ref(false);
 
 const dragOverHandler = (event) => {
   event.dataTransfer.dropEffect = 'copy';
@@ -72,7 +84,7 @@ const uploadFiles = async (file) => {
 
   try {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
-    response.value = res.data;
+    response.value = res.data.items;
   } catch (error) {
     console.error('Ошибка при отправке файлов:', error);
   }
@@ -81,7 +93,7 @@ const uploadFiles = async (file) => {
 const uploadFile = async (event) => {
   const file = event.target.files[0];
   fileName.value = file ? file.name : 'Выберите файл';
-
+  upload.value = true;
   if (!file) {
     console.error('Файл не выбран.');
     return;
@@ -92,7 +104,8 @@ const uploadFile = async (event) => {
 
   try {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
-    response.value = res.data;
+    response.value = res.data.items;
+    console.log(res.data.items);
   } catch (error) {
     console.error('Ошибка при отправке файла:', error);
   }
@@ -112,7 +125,6 @@ const uploadFile = async (event) => {
   min-height: 246px;
   width: 1440px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -121,26 +133,7 @@ const uploadFile = async (event) => {
   position: relative;
   display: inline-block;
 }
-.input-file-btn {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  outline: none;
-  text-decoration: none;
-  font-size: 14px;
-  vertical-align: middle;
-  color: rgb(255 255 255);
-  text-align: center;
-  border-radius: 4px;
-  background-color: #419152;
-  line-height: 22px;
-  height: 40px;
-  padding: 10px 20px;
-  box-sizing: border-box;
-  border: none;
-  margin: 0;
-  transition: background-color 0.2s;
-}
+
 .input-file-text {
   padding: 0 10px;
   line-height: 40px;
@@ -224,11 +217,50 @@ const uploadFile = async (event) => {
 }
 
 .dropzone {
-  border: 2px dashed #007bff;
-  border-radius: 5px;
-  padding: 20px;
-  text-align: center;
-  color: #007bff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  width: 336px;
+  height: 207px;
+  border: 5px solid #2f72ff;
+  border-radius: 20px;
+  flex-direction: column;
+  color: #2f72ff;
+}
+
+.upload_logo {
+  color: #2f72ff;
+  width: 60px;
+  height: 52px;
+  margin-bottom: 21px;
+}
+
+.or {
+  color: gray;
+  margin-bottom: 27px;
+  margin-top: 23px;
+}
+
+.drag_n_drop {
+  position: relative;
+}
+.button_send {
+  position: absolute; /* Позиционируем кнопку абсолютно относительно блока */
+  bottom: -20px; /* Сдвигаем кнопку вверх, чтобы она выходила за границы блока */
+  left: 50%; /* Размещаем по центру блока */
+  transform: translateX(
+    -50%
+  ); /* Сдвигаем кнопку обратно, чтобы она точно центрировалась по горизонтали */
+  /* Стили кнопки */
+  padding: 5px 10px;
+  width: 223px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #2f72ff;
+  border-radius: 50px;
 }
 </style>

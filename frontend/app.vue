@@ -20,4 +20,19 @@ body,
 #__nuxt {
   height: 100%;
 }
+
+.nuxt-icon {
+  width: 1em;
+  height: 1em;
+  margin-bottom: 0.125em;
+  vertical-align: middle;
+}
+.nuxt-icon--fill,
+.nuxt-icon--fill * {
+  fill: currentColor;
+}
+
+svg {
+  fill: currentColor;
+}
 </style>
