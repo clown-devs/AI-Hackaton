@@ -4,7 +4,7 @@ import requests
 from aiogram import types, Dispatcher
 
 
-from bot.create_bot import bot
+from create_bot import bot
 
 
 async def doc_set(message: types.Message, **kwargs):
