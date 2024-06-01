@@ -1,7 +1,7 @@
-from typing import Union, List
+from .models import ItemList, Item
 import hashlib
 from fastapi import FastAPI, UploadFile
-from pydantic import BaseModel
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 app = FastAPI()
@@ -16,16 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class Item(BaseModel):
-    episode: int
-    start: int
-    end: int
-    duration: int
-    type: str
 
-class ItemList(BaseModel):
-    items: List[Item]
-    word_url: str = None
 
 app.mount("/static", StaticFiles(directory="./server/static"), name="static")
 
