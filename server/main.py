@@ -1,4 +1,4 @@
-from .models import ItemList, Item
+from .models import ItemList, Item, get_ai_data
 import hashlib
 from fastapi import FastAPI, UploadFile
 
@@ -29,7 +29,8 @@ async def read_rec(file: UploadFile, n: int = 10):
     with open(f"{hex_dig}.edf", "wb") as f:
         f.write(contents)
     
-    return generate_random_array(n)
+
+    return get_ai_data(f"{hex_dig}.edf")
     
 
 def generate_random_array(n: int) :

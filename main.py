@@ -16,7 +16,6 @@ import sys
 # parser.save_to_csv(data, header, output_file)
 
 data, edf = parser.parse_file("N-1.REC")
-#print(edf.info)
-#print(data.shape)
+
 res = ai.predict_result(data, "ai/my_model.keras")
 #print(res)
