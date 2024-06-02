@@ -37,11 +37,13 @@ async def doc_set(message: types.Message, **kwargs):
         # Проверка успешности POST-запроса
         if post_response.status_code == 200:
             word_url = post_response.json()['word_url']
+            dead = post_response.json()['dead']
             get_word_response = requests.get(f"http://v0d14ka.ddns.net:99/{word_url}", stream=True)
 
             if get_word_response.content is not None:
                 await msg.delete()
-                await bot.send_document(message.from_user.id, get_word_response.content, caption='Отчет в формате WORD!')
+                await bot.send_document(message.from_user.id, get_word_response.content,
+                                        caption=f' {"Патологий не обнаружено." if dead == False else "Обнаружены патологии, обратитесь к врачу"}. Отчет в формате WORD!')
             else:
                 await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
 
