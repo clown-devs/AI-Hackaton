@@ -21,37 +21,15 @@
         </div>
       </div>
       <div class="image_main">
-        <img src="../assets/image.png" alt="" />
-      </div>
-      <div class="table_data">
-        <div v-if="response">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>№ эпизода НРД</th>
-                <th>Время начала регистрации эпизода НРД, с</th>
-                <th>Время завершения регистрации НРД, c</th>
-                <th>Длительность эпизода НДР</th>
-                <th>Тип эпизода НРД*</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="row in response" :key="row.episode">
-                <td>{{ row.episode }}</td>
-                <td>{{ row.start }}</td>
-                <td>{{ row.end }}</td>
-                <td>{{ row.duration }}</td>
-                <td>{{ row.type }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else></div>
+        <img class="image" src="../assets/image.png" alt="" />
       </div>
     </div>
-    <div v-else class="container">
-      <FinishedComponent :valueWordUrl="word_url" />
-    </div>
+    <FinishedComponent
+      v-else
+      :filePath="word_url"
+      :tableItems="response"
+      basePath="http://v0d14ka.ddns.net:99/"
+    />
   </main>
 </template>
 <script setup>
@@ -61,7 +39,7 @@ import Upload from 'assets/upload.svg';
 import FinishedComponent from './FinishedComponent.vue';
 
 let fileName = ref('Максимум 10мб');
-const word_url = ref(null);
+const word_url = ref('');
 
 const response = ref(null);
 const upload = ref(false);
@@ -78,19 +56,22 @@ const dropHandler = async (event) => {
 };
 
 const uploadFiles = async (file) => {
+  console.log(file);
   fileName.value = file ? file.name : 'Выберите файл';
-
   const formData = new FormData();
   formData.append('file', file);
-
+  console.log(formData);
   try {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data.items;
     word_url.value = res.data.word_url;
-    console.log(res.data.word_url);
   } catch (error) {
     console.error('Ошибка при отправке файлов:', error);
   }
+
+  setTimeout(() => {
+    upload.value = true;
+  }, 3000);
 };
 
 const uploadFile = async (event) => {
@@ -151,72 +132,9 @@ const uploadFile = async (event) => {
   height: 0;
 }
 
-/* Focus */
-.input-file input[type='file']:focus + .input-file-btn {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-/* Hover/active */
-.input-file:hover .input-file-btn {
-  background-color: #59be6e;
-}
-.input-file:active .input-file-btn {
-  background-color: #2e703a;
-}
-
-/* Disabled */
-.input-file input[type='file']:disabled + .input-file-btn {
-  background-color: #eee;
-}
-
-/* Table styles */
-.table {
-  width: 100%;
-  border: none;
-  margin-bottom: 20px;
-  border-collapse: separate;
-}
-.table thead th {
-  font-weight: bold;
-  text-align: left;
-  border: none;
-  padding: 10px 15px;
-  background: #ededed;
-  font-size: 14px;
-  border-top: 1px solid #ddd;
-}
-.table tr th:first-child,
-.table tr td:first-child {
-  border-left: 1px solid #ddd;
-}
-.table tr th:last-child,
-.table tr td:last-child {
-  border-right: 1px solid #ddd;
-}
-.table thead tr th:first-child {
-  border-radius: 20px 0 0 0;
-}
-.table thead tr th:last-child {
-  border-radius: 0 20px 0 0;
-}
-.table tbody td {
-  text-align: left;
-  border: none;
-  padding: 10px 15px;
-  font-size: 14px;
-  vertical-align: top;
-}
-.table tbody tr:nth-child(even) {
-  background: #f8f8f8;
-}
-.table tbody tr:last-child td {
-  border-bottom: 1px solid #ddd;
-}
-.table tbody tr:last-child td:first-child {
-  border-radius: 0 0 0 20px;
-}
-.table tbody tr:last-child td:last-child {
-  border-radius: 0 0 20px 0;
+.input-file-btn {
+  padding: 25px;
+  cursor: pointer;
 }
 
 .dropzone {
@@ -230,6 +148,9 @@ const uploadFile = async (event) => {
   border-radius: 20px;
   flex-direction: column;
   color: #2f72ff;
+  height: auto;
+  max-width: 100%;
+  padding: 20px;
 }
 
 .upload_logo {
@@ -265,5 +186,16 @@ const uploadFile = async (event) => {
   color: white;
   background-color: #2f72ff;
   border-radius: 50px;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+}
+
+.image_main {
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 }
 </style>

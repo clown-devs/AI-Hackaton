@@ -6,7 +6,8 @@ class Item(BaseModel):
     end: int
     duration: int
     type: str
-
+    
 class ItemList(BaseModel):
     items: List[Item]
     word_url: str = None
+    dead: bool

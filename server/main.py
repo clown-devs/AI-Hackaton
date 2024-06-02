@@ -34,7 +34,8 @@ async def read_rec(file: UploadFile, n: int = 10):
 
 def generate_random_array(n: int) :
     import random
-    data = ItemList(items=[], word_url="static/example.docx")
+    
+    data = ItemList(items=[], word_url="static/example.docx", dead=random.choice([True, False]))
     for i in range(n):
         data.items.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type="type"))
     return data
