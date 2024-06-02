@@ -1,17 +1,17 @@
 version: '3.9'
 
 services:
-  fastapi:
-    restart: "no"
-    hostname: api
-    container_name: api
-    build:
-      dockerfile: server/Dockerfile
-    command: sh -c "uvicorn server.main:app --reload --host 0.0.0.0 --port 85"
-    volumes:
-      - ./:/AI-Hackaton
-    ports:
-      - '85:85'
+#  fastapi:
+#    restart: "no"
+#    hostname: api
+#    container_name: api
+#    build:
+#      dockerfile: server/Dockerfile
+#    command: sh -c "uvicorn server.main:app --reload --host 0.0.0.0 --port 85"
+#    volumes:
+#      - ./:/AI-Hackaton
+#    ports:
+#      - '85:85'
 
   bot_ai:
     restart: "no"
