@@ -34,6 +34,7 @@ def to_seq(x, y, seq_size=1):
     return np.array(x_values), np.array(y_values)
 
 
+# returns anomalies and duration of signal
 def predict_result(data, path_to_model):
     
     scaler = StandardScaler()
@@ -46,18 +47,19 @@ def predict_result(data, path_to_model):
     signal_in_channel = pd.DataFrame({'timestamp': np.arange(len(signal_in_channel)), 'value': signal_in_channel.reshape(-1)})
     
     signal_with_mean_transform = window_average(signal_in_channel['value'], 200, 200)
-    print("WINDOW:",signal_with_mean_transform)
+    #print("WINDOW:",signal_with_mean_transform)
     ### OK! WITH Kakich local
     
     signal_with_mean_transform['value'] = scaler.fit_transform(signal_with_mean_transform[['value']])
     seq_size = 30
 
+    #print("SEC:",signal_with_mean_transform.shape[0])
     signal_croped_in_windows, _ = to_seq(
         signal_with_mean_transform[['value']], 
         signal_with_mean_transform['value'], 
         seq_size=30
     )
-    print("CROP:",signal_croped_in_windows)
+    #print("CROP:",signal_croped_in_windows)
     
     reconstructed_model = keras.models.load_model(path_to_model)
 
@@ -83,4 +85,4 @@ def predict_result(data, path_to_model):
     
     anomaly_intervals = find_anomaly_interval(anomalies['time'])
  
-    return anomaly_intervals
+    return anomaly_intervals, signal_with_mean_transform.shape[0]

@@ -4,6 +4,7 @@ from fastapi import FastAPI, UploadFile
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from .word.word import generate_doc
 app = FastAPI()
 
 origins = ["*"]
@@ -24,13 +25,15 @@ app.mount("/static", StaticFiles(directory="./server/static"), name="static")
 @app.post("/")
 async def read_rec(file: UploadFile, n: int = 10):
     contents = await file.read()
-    hash_data = hashlib.md5(contents).hexdigest()
+    
     hex_dig = hashlib.md5(contents).hexdigest()
     with open(f"{hex_dig}.edf", "wb") as f:
         f.write(contents)
     
-
-    return get_ai_data(f"{hex_dig}.edf")
+    ai_data, sec = get_ai_data(f"{hex_dig}.edf")
+    generate_doc(sec, ai_data, f"server/static/{hex_dig}.docx")
+    resp = ItemList(items=ai_data, word_url=f"static/{hex_dig}.docx", dead=False, duration=sec)
+    return resp
     
 
 def generate_random_array(n: int) :
