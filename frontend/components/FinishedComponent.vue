@@ -10,6 +10,14 @@
             Назад
           </button>
         </div>
+        <div class="description">
+          <h3 v-if="anomaleData" class="true_anomale">
+            У данного пациента обнаружено апноэ
+          </h3>
+          <h3 v-else class="false_anomale">
+            У данного пациента не обнаружено апноэ
+          </h3>
+        </div>
         <table class="table">
           <thead>
             <tr>
@@ -60,6 +68,7 @@ import Download from 'assets/download.svg';
 const props = defineProps({
   filePath: String,
   tableItems: Array,
+  anomaleData: Boolean,
   basePath: String,
 });
 const response = ref(false);
@@ -191,5 +200,25 @@ function reloadPage() {
 }
 .table tbody tr:last-child td:last-child {
   border-radius: 0 0 20px 0;
+}
+
+.true_anomale {
+  text-align: center;
+  margin-block: 30px;
+  padding: 20px;
+  font-size: 25px;
+  border: 2px solid rgb(220, 116, 116);
+  color: #2f72ff;
+  background-color: rgb(235, 164, 164);
+}
+
+.false_anomale {
+  text-align: center;
+  margin-block: 30px;
+  padding: 20px;
+  font-size: 25px;
+  border: 2px solid rgb(17, 167, 107);
+  color: #2f72ff;
+  background-color: rgb(132, 218, 142);
 }
 </style>

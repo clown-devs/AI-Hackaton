@@ -28,6 +28,7 @@
       v-else
       :filePath="word_url"
       :tableItems="response"
+      :anomaleData="anomale"
       basePath="http://v0d14ka.ddns.net:99/"
     />
   </main>
@@ -40,7 +41,7 @@ import FinishedComponent from './FinishedComponent.vue';
 
 let fileName = ref('Максимум 10мб');
 const word_url = ref('');
-
+const anomale = ref(false);
 const response = ref(null);
 const upload = ref(false);
 
@@ -65,6 +66,7 @@ const uploadFiles = async (file) => {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data.items;
     word_url.value = res.data.word_url;
+    anomale.value = res.data.dead;
   } catch (error) {
     console.error('Ошибка при отправке файлов:', error);
   }
@@ -90,6 +92,7 @@ const uploadFile = async (event) => {
     const res = await axios.post('http://v0d14ka.ddns.net:99/', formData);
     response.value = res.data.items;
     word_url.value = res.data.word_url;
+    anomale.value = res.data.dead;
   } catch (error) {
     console.error('Ошибка при отправке файла:', error);
   }
