@@ -44,7 +44,7 @@
           <a :href="completeFilePath" download="example">
             <button class="download_button">
               <div class="cont_but">
-                <span class="title_but">Скачать файл</span>
+                <span style="cursor: pointer;" class="title_but">Скачать файл</span>
                 <Download class="download_logo" />
               </div>
             </button>

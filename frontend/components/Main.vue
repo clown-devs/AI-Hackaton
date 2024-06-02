@@ -24,13 +24,27 @@
         <img class="image" src="../assets/image.png" alt="" />
       </div>
     </div>
-    <FinishedComponent
-      v-else
-      :filePath="word_url"
-      :tableItems="response"
-      :anomaleData="anomale"
-      basePath="http://v0d14ka.ddns.net:99/"
-    />
+
+
+    <div v-else class="loading">
+      <div
+        style="display: flex; align-items: center"
+        class="progress"
+        v-if="loading"
+      >
+        <span style="margin-right: 20px">Загрузка:</span>
+        <progress style="height: 30px" max="100" :value="progress"></progress>
+      </div>
+
+      <div v-else>
+        <FinishedComponent
+          :filePath="word_url"
+          :tableItems="response"
+          :anomaleData="anomale"
+          basePath="http://v0d14ka.ddns.net:99/"
+        />
+      </div>
+    </div>
   </main>
 </template>
 <script setup>
@@ -38,7 +52,7 @@ import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import Upload from 'assets/upload.svg';
 import FinishedComponent from './FinishedComponent.vue';
-
+const loading = ref(true);
 let fileName = ref('Максимум 10мб');
 const word_url = ref('');
 const anomale = ref(false);
@@ -69,11 +83,9 @@ const uploadFiles = async (file) => {
     anomale.value = res.data.dead;
   } catch (error) {
     console.error('Ошибка при отправке файлов:', error);
+  } finally {
+    loading.value = false;
   }
-
-  setTimeout(() => {
-    upload.value = true;
-  }, 3000);
 };
 
 const uploadFile = async (event) => {
@@ -95,8 +107,25 @@ const uploadFile = async (event) => {
     anomale.value = res.data.dead;
   } catch (error) {
     console.error('Ошибка при отправке файла:', error);
+  } finally {
+    loading.value = false;
   }
 };
+
+const loadData = async () => {
+  const interval = setInterval(() => {
+    if (progress.value < 100) {
+      progress.value += 10; // Увеличиваем прогресс
+    } else {
+      clearInterval(interval);
+      loading.value = false; // Данные загружены, прячем progress bar
+    }
+  }, 500);
+};
+
+onMounted(() => {
+  loadData();
+});
 </script>
 <style scoped>
 .main {
