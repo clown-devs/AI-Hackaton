@@ -15,6 +15,6 @@ def cut_file_in_quarters(input_file, output_file):
 
 
 # Использование функции
-input_file = 'N-1.REC'
-output_file = 'output.REC'
-cut_file_in_quarters(input_file, output_file)
+# input_file = 'N-1.REC'
+# output_file = 'output.REC'
+# cut_file_in_quarters(input_file, output_file)

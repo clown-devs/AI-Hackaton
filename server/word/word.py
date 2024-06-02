@@ -27,7 +27,13 @@ def generate_doc(sec: int, items: List[Item], word_name: str) -> str:
     duration_run.font.size = Pt(12)
     duration.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
-    # Добавляем пустую строку после информации о длительности
+    # Добавляем информацию о канале анализа
+    channel = doc.add_paragraph()
+    channel_run = channel.add_run('Анализировался канал "Fp1-M2"')
+    channel_run.font.size = Pt(12)
+    channel.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+    # Добавляем пустую строку после информации о канале
     doc.add_paragraph()
 
     # Добавляем заголовок таблицы
