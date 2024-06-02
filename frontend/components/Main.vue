@@ -173,13 +173,10 @@ const uploadFile = async (event) => {
   position: relative;
 }
 .button_send {
-  position: absolute; /* Позиционируем кнопку абсолютно относительно блока */
-  bottom: -20px; /* Сдвигаем кнопку вверх, чтобы она выходила за границы блока */
-  left: 50%; /* Размещаем по центру блока */
-  transform: translateX(
-    -50%
-  ); /* Сдвигаем кнопку обратно, чтобы она точно центрировалась по горизонтали */
-  /* Стили кнопки */
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 5px 10px;
   width: 223px;
   height: 36px;

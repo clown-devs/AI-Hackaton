@@ -1,7 +1,7 @@
 <template>
   <footer class="footer_container">
     <div class="container">
-      <a target="_blank" href="https://t.me/bozhedoms"><Telergam class="telegram_logo" /></a>
+      <a target="_blank" href="https://t.me/Clown_devs_AI_bot"><Telergam class="telegram_logo" /></a>
       <a target="_blank" href="https://github.com/clown-devs"><GitHub class="github_logo" /></a>
     </div>
   </footer>

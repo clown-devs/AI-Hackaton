@@ -38,7 +38,6 @@
             </tr>
           </tbody>
         </table>
-        <!-- <h1 style="font-size: 250px; color: red;">ИДИ НАХУЙ!!</h1> -->
       </div>
       <div v-else class="finish">
         <div class="container_buttons">
