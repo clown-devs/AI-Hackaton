@@ -12,10 +12,10 @@
         </div>
         <div class="description">
           <h3 v-if="anomaleData" class="true_anomale">
-            У данного пациента обнаружено апноэ
+            У данного пациента найдена аномалия
           </h3>
           <h3 v-else class="false_anomale">
-            У данного пациента не обнаружено апноэ
+            У данного пациента не найдена аномалия
           </h3>
         </div>
         <table class="table">
