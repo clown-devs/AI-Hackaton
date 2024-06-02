@@ -3,6 +3,7 @@
 *.csv
 *.edf
 *.REC
+*.keras
 
 venv
 .venv
