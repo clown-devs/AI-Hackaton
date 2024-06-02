@@ -32,14 +32,16 @@ async def read_rec(file: UploadFile, n: int = 10):
     
     ai_data, sec = get_ai_data(f"{hex_dig}.edf")
     generate_doc(sec, ai_data, f"server/static/{hex_dig}.docx")
-    resp = ItemList(items=ai_data, word_url=f"static/{hex_dig}.docx", dead=False, duration=sec)
+    # getted dead from randomizer model
+    import random
+    resp = ItemList(items=ai_data, duration=sec, word_url=f"static/{hex_dig}.docx", dead=random.choice([True, False]))
     return resp
     
 
 def generate_random_array(n: int) :
     types = ["апное","гипопноэ", "центральное апноэ", "обструктивное апноэ", "???", "храп"]
-    import random
     
+    import random
     data = ItemList(items=[], word_url="static/example.docx", dead=random.choice([True, False]))
     for i in range(n):
         data.items.append(Item(episode=i, start=random.randint(0, 100), end=random.randint(0, 100), duration=random.randint(0, 100), type=random.choice(types)))
