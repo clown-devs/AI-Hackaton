@@ -34,7 +34,7 @@ async def read_rec(file: UploadFile, n: int = 10):
     generate_doc(sec, ai_data, f"server/static/{hex_dig}.docx")
     # getted dead from randomizer model
     import random
-    resp = ItemList(items=ai_data, word_url=f"static/{hex_dig}.docx", dead=random.choice([True, False]))
+    resp = ItemList(items=ai_data, duration=sec, word_url=f"static/{hex_dig}.docx", dead=random.choice([True, False]))
     return resp
     
 
