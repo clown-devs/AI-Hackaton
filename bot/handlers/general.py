@@ -18,9 +18,13 @@ async def doc_set(message: types.Message, **kwargs):
         await message.delete()
         return
 
-    # Сохраняем файл
     msg = await bot.send_message(message.from_user.id, "Пожалуйста дождитесь загрузки файла🕒")
-    file_info = await bot.get_file(message.document.file_id)
+    try:
+        file_info = await bot.get_file(message.document.file_id)
+    except:
+        await msg.edit_text("Файл слишком большой, максимально допустимый размер - 20 Мб.")
+        await message.delete()
+        return
 
     BOT_TOKEN = os.getenv("TOKEN")
     file_url = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file_info.file_path}'
@@ -45,16 +49,16 @@ async def doc_set(message: types.Message, **kwargs):
                 await bot.send_document(message.from_user.id, get_word_response.content,
                                         caption=f' {"Патологий не обнаружено." if dead == False else "Обнаружены патологии, обратитесь к врачу"}. Отчет в формате WORD!')
             else:
-                await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
+                await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже.")
 
         else:
             print(f'Ошибка при отправке файла: {post_response.status_code}')
             print(post_response.text)
-            await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
+            await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже.")
             return
     else:
         print(f'Ошибка при получении файла: {response.status_code}')
-        await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже")
+        await msg.edit_text("Произошла непредвиденная ошибка, повторите попытку позже.")
         return
 
     await message.delete()
